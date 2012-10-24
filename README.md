@@ -3,7 +3,7 @@ Baxter (web app)
 
 ##In development
 
-You can probably tell Baxter isn't ready yet. Follow [@W0lftron](https://twitter.com/W0lftron) for updates!
+You can probably tell Baxter isn't ready yet. Watch this repo or follow [@W0lftron](https://twitter.com/W0lftron) for updates!
 
 ##About
 
