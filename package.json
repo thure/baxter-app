@@ -1,9 +1,14 @@
 {
     "name": "baxter-server",
+    "description": "Baxter will help you and authorized guests control and automate your home, using Electric Imp, OAuth, and any peripherals you care to install.",
     "version": "0.0.1",
     "dependencies": {
+        "underscore": "*",
         "express": "3.0.x",
-        "ejs": "*"
+        "passport": "0.1.x",
+        "oauth2orize": "0.1.x",
+        "request": "2.11.x",
+        "mongoose": "3.3.x"
     },
     "engines": {
         "node": "0.8.x",
