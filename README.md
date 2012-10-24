@@ -1,4 +1,10 @@
-baxter-server
+Baxter (web app)
 =============
 
-Baxter will help you and authorized guests control and automate your home, using Electric Imp, OAuth, and any peripherals you care to install.
+##About
+
+The Baxter app is designed to interface with one or more Electric Imp clients running Baxter imp.
+
+##License
+
+Baxter, both app and imp, are released under the MIT license.
