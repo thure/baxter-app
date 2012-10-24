@@ -7,7 +7,7 @@ You can probably tell Baxter isn't ready yet. Follow [@W0lftron](https://twitter
 
 ##About
 
-The Baxter app is designed to interface with one or more Electric Imp clients running Baxter imp.
+The Baxter app is designed to interface with one or more [Electric Imp](http://electricimp.com) clients running [Baxter imp](https://github.com/thure/baxter-imp).
 
 ##License
 
