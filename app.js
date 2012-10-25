@@ -6,6 +6,11 @@ var express = require('express')
 var app = express()
   , db = mongoose.createConnection(config.db.uri);
 
+db.on('error', console.error.bind(console, 'DB connection error:'));
+db.once('open', function () {
+  console.log('Successfully connected to DB.');
+});
+
 // Routing
 app.get('/', function(request, response) {
   response.send('Hello World!');
