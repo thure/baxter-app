@@ -1,8 +1,12 @@
-var express = require('express');
-var app = express();
+var express = require('express')
+  , mongoose = require('mongoose')
+  , config = require('./config.js')
+  ;
+
+var app = express()
+  , db = mongoose.createConnection(config.db.uri);
 
 // Routing
-
 app.get('/', function(request, response) {
   response.send('Hello World!');
 });
