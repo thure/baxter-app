@@ -6,15 +6,7 @@
     "underscore": "*",
     "ejs": "0.8.x",
     "express": "3.0.x",
-    "oauth2orize": "0.1.x",
-    "request": "2.11.x",
-    "mongoose": "3.3.x",
-    "passport": "0.1.x",
-    "passport-local": "0.1.x",
-    "passport-http": "0.2.x",
-    "passport-http-bearer": "0.2.x",
-    "passport-oauth2-client-password": "0.1.x",
-    "connect-ensure-login": "0.1.x"
+    "oauth2-provider": ">=1.0.0 <2.0.0"
   },
   "engines": {
     "node": "0.8.x",
