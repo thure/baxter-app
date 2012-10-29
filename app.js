@@ -6,6 +6,7 @@ var express = require('express')
 var app = express();
 var db = global.db = mongoose.createConnection(config.db.uri);
 
+console.log('Connecting to DB...');
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function () {
 
@@ -28,7 +29,6 @@ db.once('open', function () {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
   // Routing
-
   require('./auth');
 
   app.get('/', site.index);
