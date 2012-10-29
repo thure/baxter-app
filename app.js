@@ -17,7 +17,7 @@ db.once('open', function () {
     , oauth2 = require('./oauth2')
     , user = require('./user');
 
-    // Middleware
+  // Middleware
   app.set('view engine', 'ejs');
   app.use(express.logger());
   app.use(express.cookieParser());

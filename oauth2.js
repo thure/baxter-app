@@ -110,7 +110,7 @@ exports.authorization = [
   function(req, res){
     res.render('dialog', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client });
   }
-]
+];
 
 // user decision endpoint
 //
@@ -122,7 +122,7 @@ exports.authorization = [
 exports.decision = [
   login.ensureLoggedIn(),
   server.decision()
-]
+];
 
 
 // token endpoint
@@ -136,4 +136,4 @@ exports.token = [
   passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
   server.token(),
   server.errorHandler()
-]
+];

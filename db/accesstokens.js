@@ -1,4 +1,13 @@
-var tokens = global.db.tokens;
+var mongoose = require('mongoose');
+var tokens = global.db.collection('tokens');
+
+var tokenSchema = new mongoose.Schema({
+  id: Number,
+  userId: Number,
+  clientId: Number
+});
+
+var Token = global.db.model('Token', tokenSchema);
 
 exports.find = function(id, done) {
   return done(null, tokens.findOne({id: id}));
