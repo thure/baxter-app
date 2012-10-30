@@ -5,9 +5,10 @@
   "dependencies": {
     "underscore": "*",
     "ejs": "0.8.x",
-    "connect": "*",
     "express": "3.0.x",
-    "oauth2-provider": ">=1.0.0 <2.0.0"
+    "connect": "*",
+    "passport": "0.1.x",
+    "mongoose": "3.3.x"
   },
   "engines": {
     "node": "0.8.x",
