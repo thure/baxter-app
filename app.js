@@ -86,46 +86,6 @@ myOAP.on('access_token', function(req, token, next) {
   next();
 });
 
-function router(app) {
-  app.get('/', function(req, res, next) {
-    res.end('home, logged in? ' + !!req.session.user);
-  });
-
-  app.get('/login', function(req, res, next) {
-    if(req.session.user) {
-      res.writeHead(303, {Location: '/'});
-      return res.end();
-    }
-
-    var next_url = req.query.next ? req.query.next : '/';
-
-    res.end('<html><form method="post" action="/login"><input type="hidden" name="next" value="' + next_url + '"><input type="text" placeholder="username" name="username"><input type="password" placeholder="password" name="password"><button type="submit">Login</button></form>');
-  });
-
-  app.post('/login', function(req, res, next) {
-    req.session.user = req.body.username;
-
-    res.writeHead(303, {Location: req.body.next || '/'});
-    res.end();
-  });
-
-  app.get('/logout', function(req, res, next) {
-    req.session.destroy(function(err) {
-      res.writeHead(303, {Location: '/'});
-      res.end();
-    });
-  });
-
-  app.get('/secret', function(req, res, next) {
-    if(req.session.user) {
-      res.end('proceed to secret lair, extra data: ' + JSON.stringify(req.session.data));
-    } else {
-      res.writeHead(403);
-      res.end('no');
-    }
-  });
-}
-
 var app = express.createServer(
   express.logger(),
   express.bodyParser(),
@@ -133,9 +93,46 @@ var app = express.createServer(
   express.cookieParser(),
   express.session({store: new MemoryStore({reapInterval: 5 * 60 * 1000}), secret: 'abracadabra'}),
   myOAP.oauth(),
-  myOAP.login(),
-  express.router(router)
+  myOAP.login()
 );
+
+app.get('/', function(req, res, next) {
+  res.end('home, logged in? ' + !!req.session.user);
+});
+
+app.get('/login', function(req, res, next) {
+  if(req.session.user) {
+    res.writeHead(303, {Location: '/'});
+    return res.end();
+  }
+
+  var next_url = req.query.next ? req.query.next : '/';
+
+  res.end('<html><form method="post" action="/login"><input type="hidden" name="next" value="' + next_url + '"><input type="text" placeholder="username" name="username"><input type="password" placeholder="password" name="password"><button type="submit">Login</button></form>');
+});
+
+app.post('/login', function(req, res, next) {
+  req.session.user = req.body.username;
+
+  res.writeHead(303, {Location: req.body.next || '/'});
+  res.end();
+});
+
+app.get('/logout', function(req, res, next) {
+  req.session.destroy(function(err) {
+    res.writeHead(303, {Location: '/'});
+    res.end();
+  });
+});
+
+app.get('/secret', function(req, res, next) {
+  if(req.session.user) {
+    res.end('proceed to secret lair, extra data: ' + JSON.stringify(req.session.data));
+  } else {
+    res.writeHead(403);
+    res.end('no');
+  }
+});
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {

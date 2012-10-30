@@ -5,8 +5,8 @@
   "dependencies": {
     "underscore": "*",
     "ejs": "0.8.x",
-    "express": "3.0.x",
     "connect": "*",
+    "express": "3.0.x",
     "oauth2-provider": ">=1.0.0 <2.0.0"
   },
   "engines": {
