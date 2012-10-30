@@ -86,15 +86,17 @@ myOAP.on('access_token', function(req, token, next) {
   next();
 });
 
-var app = express.createServer(
-  express.logger(),
-  express.bodyParser(),
-  express.query(),
-  express.cookieParser(),
-  express.session({store: new MemoryStore({reapInterval: 5 * 60 * 1000}), secret: 'abracadabra'}),
-  myOAP.oauth(),
-  myOAP.login()
-);
+var app = express();
+
+app.use(express.logger());
+app.use(express.bodyParser());
+app.use(express.query());
+app.use(express.cookieParser());
+app.use(express.session({store: new MemoryStore({reapInterval: 5 * 60 * 1000}), secret: 'abracadabra'}));
+app.use(myOAP.oauth());
+app.use(myOAP.login());
+app.use(app.router);
+app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
 app.get('/', function(req, res, next) {
   res.end('home, logged in? ' + !!req.session.user);
