@@ -13,13 +13,18 @@ exports.loginForm = function(req, res) {
   res.render('login');
 };
 
-//exports.login = passport.authenticate('local', {
-//  successRedirect: '/result',
-//  failureRedirect: '/login',
-//  failureFlash: true
-//});
+exports.login = [
+  function(){
+    console.log('Trying to log in!');
+  },
+  passport.authenticate('local', {
+    successRedirect: '/result',
+    failureRedirect: '/login',
+    failureFlash: true
+  })
+];
 
-exports.result = exports.login = [
+exports.result = [
   login.ensureLoggedIn(),
   function(req, res){
     res.render('result', {user: req.user});
