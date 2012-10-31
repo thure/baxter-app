@@ -13,13 +13,13 @@ exports.loginForm = function(req, res) {
   res.render('login');
 };
 
-exports.login = passport.authenticate('local', {
-  successRedirect: '/result',
-  failureRedirect: '/login',
-  failureFlash: true
-});
+//exports.login = passport.authenticate('local', {
+//  successRedirect: '/result',
+//  failureRedirect: '/login',
+//  failureFlash: true
+//});
 
-exports.result = [
+exports.result = exports.login = [
   login.ensureLoggedIn(),
   function(req, res){
     res.render('result', {user: req.user});
