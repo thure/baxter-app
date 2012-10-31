@@ -28,7 +28,7 @@ db.once('open', function () {
     return password === this.password;
   };
 
-  var Users = mongoose.model('users', UserSchema);
+  var Users = db.model('users', UserSchema);
 
   //Authentication
   passport.serializeUser(function(user, done) {
