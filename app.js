@@ -60,7 +60,15 @@ db.once('open', function () {
   //Routing
   app.get('/', function(req, res){ res.redirect('/login') });
   app.get('/login', site.loginForm);
-  app.post('/login', site.login);
+  app.post('/login', [
+    function(){
+      console.log('Trying to log in!');
+    },
+    passport.authenticate('local', {
+      successRedirect: '/result',
+      failureRedirect: '/login'
+    })
+  ]);
   app.get('/result', site.result);
   app.get('/logout', site.logout);
 

@@ -4,11 +4,11 @@
   "version": "0.0.1",
   "dependencies": {
     "underscore": "*",
-    "ejs": "0.8.x",
+    "ejs": "*",
     "express": "3.0.x",
     "connect": "*",
     "connect-ensure-login": "*",
-    "passport": "0.1.x",
+    "passport": "*",
     "passport-local": "*",
     "mongoose": "3.3.x"
   },

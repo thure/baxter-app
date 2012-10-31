@@ -1,22 +1,11 @@
 /**
  * Module dependencies.
  */
-var passport = require('passport')
-  , login = require('connect-ensure-login');
+var login = require('connect-ensure-login');
 
 exports.loginForm = function(req, res) {
   res.render('login');
 };
-
-exports.login = [
-  function(){
-    console.log('Trying to log in!');
-  },
-  passport.authenticate('local', {
-    successRedirect: '/result',
-    failureRedirect: '/login'
-  })
-];
 
 exports.result = [
   login.ensureLoggedIn(),
