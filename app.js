@@ -17,7 +17,17 @@ db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function () {
 
   //Database
-  var Users = db.collection('users');
+  var UserSchema = new mongoose.Schema({
+    id: Number,
+    username: String,
+    password: String,
+    name: String
+  });
+
+  var Users = mongoose.model('users', UserSchema);
+  Users.methods.validPassword = function(password){
+    return password === this.password;
+  };
 
   //Authentication
   passport.use(new LocalStrategy(
