@@ -1,6 +1,6 @@
 var dbu = 'baxter'
-  , dbp = 'Ghsqu2r0UoTN3JSkoCeL'
-  , dburi = 'mongodb://' + dbu + ':' + dbp + '@ds041327.mongolab.com:41327/heroku_app8710643'
+  , dbp = 'dbpass'
+  , dburi = 'mongodb://' + dbu + ':' + dbp + '@sub.domain.tld:port/endpoint'
   ;
 
 exports.db = {
