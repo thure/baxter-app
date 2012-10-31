@@ -6,7 +6,6 @@
     "underscore": "*",
     "ejs": "*",
     "express": "3.0.x",
-    "connect": "*",
     "connect-ensure-login": "*",
     "passport": "*",
     "passport-local": "*",
