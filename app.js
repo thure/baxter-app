@@ -23,11 +23,11 @@ db.once('open', function () {
     password: String,
     name: String
   });
-
-  var Users = mongoose.model('users', UserSchema);
-  Users.methods.validPassword = function(password){
+  UserSchema.methods.validPassword = function(password){
     return password === this.password;
   };
+
+  var Users = mongoose.model('users', UserSchema);
 
   //Authentication
   passport.use(new LocalStrategy(
