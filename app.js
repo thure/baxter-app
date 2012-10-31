@@ -46,6 +46,7 @@ db.once('open', function () {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
   //Routing
+  app.get('/', function(req, res){ res.redirect('/login') });
   app.get('/login', site.loginForm);
   app.post('/login', site.login);
   app.get('/result', site.result);
