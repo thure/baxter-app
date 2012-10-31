@@ -24,6 +24,7 @@ db.once('open', function () {
     name: String
   });
   UserSchema.methods.validPassword = function(password){
+    console.log('Validating password: ', password, this.password);
     return password === this.password;
   };
 
@@ -32,6 +33,7 @@ db.once('open', function () {
   //Authentication
   passport.use(new LocalStrategy(
     function(username, password, done) {
+      console.log('Retrieving user ', username);
       Users.findOne({ username: username }, function (err, user) {
         if (err) { return done(err); }
         if (!user) {

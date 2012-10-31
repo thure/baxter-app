@@ -19,18 +19,14 @@ exports.login = passport.authenticate('local', {
   failureFlash: true
 });
 
-exports.result = function(req, res){
-  res.render('result', {user: req.user});
-};
+exports.result = [
+  login.ensureLoggedIn(),
+  function(req, res){
+    res.render('result', {user: req.user});
+  }
+];
 
 exports.logout = function(req, res) {
   req.logout();
   res.redirect('/');
 };
-
-exports.account = [
-  login.ensureLoggedIn(),
-  function(req, res) {
-    res.render('account', { user: req.user });
-  }
-];
