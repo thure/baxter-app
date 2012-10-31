@@ -31,6 +31,14 @@ db.once('open', function () {
   var Users = mongoose.model('users', UserSchema);
 
   //Authentication
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+  passport.deserializeUser(function(id, done) {
+    Users.findOne(id, function (err, user) {
+      done(err, user);
+    });
+  });
   passport.use(new LocalStrategy(
     function(username, password, done) {
       console.log('Retrieving user ', username);
@@ -49,13 +57,16 @@ db.once('open', function () {
 
   //Middleware
   app.set('view engine', 'ejs');
-  app.use(express.logger());
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(passport.initialize());
-  app.use(passport.session());
-  app.use(app.router);
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.configure(function() {
+    app.use(express.logger());
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.use(app.router);
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  });
 
   //Routing
   app.get('/', function(req, res){ res.redirect('/login') });
