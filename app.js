@@ -3,15 +3,55 @@
 var express = require('express')
   , mongoose = require('mongoose')
   , config = require('./config.js')
+  , site = require('./site.js')
   ;
 
 var app = express()
   , db = global.db = mongoose.createConnection(config.db.uri)
   ;
 
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function () {
 
+  //Database
+  var Users = db.collection('users');
+
+  //Authentication
+  passport.use(new LocalStrategy(
+    function(username, password, done) {
+      Users.findOne({ username: username }, function (err, user) {
+        if (err) { return done(err); }
+        if (!user) {
+          return done(null, false, { message: 'Unknown user' });
+        }
+        if (!user.validPassword(password)) {
+          return done(null, false, { message: 'Invalid password' });
+        }
+        return done(null, user);
+      });
+    }
+  ));
+
+  //Middleware
+  app.set('view engine', 'ejs');
+  app.use(express.logger());
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+
+  //Routing
+  app.get('/login', site.loginForm);
+  app.post('/login', site.login);
+  app.get('/result', site.result);
+  app.get('/logout', site.logout);
+
+  //Starting
   var port = process.env.PORT || 5000;
   app.listen(port, function() {
     console.log("Listening on " + port);
