@@ -77,7 +77,8 @@ db.once('open', function () {
   app.get('/logout', site.logout);
 
   //Starting
-  app.listen(process.env.PORT || 5000, function() {
+  var port = process.env.PORT || 5000;
+  app.listen(port, function() {
     console.log("Listening on " + port);
   });
 
