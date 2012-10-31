@@ -56,8 +56,9 @@ db.once('open', function () {
   ));
 
   //Middleware
-  app.set('view engine', 'ejs');
   app.configure(function() {
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'ejs');
     app.use(express.logger());
     app.use(express.cookieParser());
     app.use(express.bodyParser());
@@ -71,21 +72,12 @@ db.once('open', function () {
   //Routing
   app.get('/', function(req, res){ res.redirect('/login') });
   app.get('/login', site.loginForm);
-  app.post('/login', [
-    function(){
-      console.log('Trying to log in!');
-    },
-    passport.authenticate('local', {
-      successRedirect: '/result',
-      failureRedirect: '/login'
-    })
-  ]);
+  app.post('/login', site.login);
   app.get('/result', site.result);
   app.get('/logout', site.logout);
 
   //Starting
-  var port = process.env.PORT || 5000;
-  app.listen(port, function() {
+  app.listen(process.env.PORT || 5000, function() {
     console.log("Listening on " + port);
   });
 
