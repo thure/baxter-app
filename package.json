@@ -9,6 +9,7 @@
     "connect": "*",
     "connect-ensure-login": "*",
     "passport": "0.1.x",
+    "passport-local": "*",
     "mongoose": "3.3.x"
   },
   "engines": {
