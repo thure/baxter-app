@@ -2,29 +2,28 @@
  * Module dependencies.
  */
 var passport = require('passport')
-  , login = require('connect-ensure-login');
+  , _ = require('underscore')
+  ;
 
 exports.index = function(req, res) {
-  res.render('index');
+  res.sendfile('front/dist/index.html');
 };
 
-exports.loginForm = function(req, res) {
-  res.render('login');
-};
-
-exports.result = [
-  login.ensureLoggedIn(),
-  function(req, res){
-    res.render('result', {user: req.user});
-  }
-];
-
-exports.login = passport.authenticate('local', {
-      successRedirect: '/result',
-      failureRedirect: '/login'
+exports.login = function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err) }
+    if (!user) { return res.status(401).json({"message": "I'm afraid your username or password was incorrect."}) }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.status(200).json({
+        "message": "You've successfully logged in!" ,
+        "user": _.omit(user.toJSON(), ['id', '_id'])
+      });
     });
+  })(req, res, next);
+};
 
 exports.logout = function(req, res) {
   req.logout();
-  res.redirect('/');
+  res.status(200).json({"message": "You've successfully logged out."});
 };

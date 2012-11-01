@@ -2,6 +2,7 @@
 
 var express = require('express')
   , mongoose = require('mongoose')
+  , login = require('connect-ensure-login')
   , config = require('./config.js')
   , site = require('./site.js')
   ;
@@ -21,7 +22,8 @@ db.once('open', function () {
     id: Number,
     username: String,
     password: String,
-    name: String
+    name: String,
+    type: String
   });
   UserSchema.methods.validPassword = function(password){
     return password === this.password;
@@ -67,11 +69,9 @@ db.once('open', function () {
     }
   ));
 
-  //Routing
+  //Routing (insert login.ensureLoggedIn() if protected endpoint)
   app.get('/',       site.index);
-  app.get('/login',  site.loginForm);
   app.post('/login', site.login);
-  app.get('/result', site.result);
   app.get('/logout', site.logout);
 
   //Rerouting
@@ -85,7 +85,7 @@ db.once('open', function () {
   //Starting
   var port = process.env.PORT || 5000;
   app.listen(port, function() {
-    console.log("Listening on " + port);
+    console.log("Baxter service is now listening on port № " + port + ".");
   });
 
 });
