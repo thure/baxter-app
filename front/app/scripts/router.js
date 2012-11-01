@@ -13,6 +13,10 @@ define([ 'backbone'
     routes: {
       // global
       '': 'index',
+      'dashboard': 'dashboard',
+      'control': 'control',
+      'guests': 'guests',
+      'imps': 'imps',
 
       // default
       '*path': 'default'
@@ -42,6 +46,16 @@ define([ 'backbone'
       }else{
         this.login();
       }
+    },
+
+    control: function(){
+      console.log('Control');
+    },
+    guests: function(){
+      console.log('Guests');
+    },
+    imps: function(){
+      console.log('Imps');
     }
 
   });
