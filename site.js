@@ -6,7 +6,7 @@ var passport = require('passport')
   ;
 
 exports.index = function(req, res) {
-  res.sendfile('front/dist/index.html');
+  res.render('index', {user: !!req.user ? _.omit(req.user.toJSON(), ['id', '_id']): void(0) });
 };
 
 exports.login = function(req, res, next) {

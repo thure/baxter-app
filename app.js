@@ -35,7 +35,7 @@ db.once('open', function () {
   app.configure(function() {
     app.set('views', __dirname + '/front/dist');
     app.set('view engine', 'ejs');
-    app.use(express.logger());
+    // app.use(express.logger());
     app.use(express.cookieParser());
     app.use(express.bodyParser());
     app.use(express.session({ secret: 'keyboard cat' }));
@@ -70,7 +70,7 @@ db.once('open', function () {
   ));
 
   //Routing (insert login.ensureLoggedIn() if protected endpoint)
-  app.get('/',       site.index);
+  app.get('/', passport.authenticate('session'), site.index);
   app.post('/login', site.login);
   app.get('/logout', site.logout);
 

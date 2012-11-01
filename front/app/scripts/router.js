@@ -1,6 +1,6 @@
-define([
-  'backbone',
-], function(Backbone){
+define([ 'backbone'
+  ,'views/login'
+], function(Backbone, login){
 
   var AppRouter = Backbone.Router.extend({
 
@@ -18,7 +18,16 @@ define([
 
     index: function(){
       console.log('At index.');
+      if(!window.session){
+        this.login();
+      }
+    },
+
+    login: function(){
+      console.log('Gonna log you in now.');
+      login.render('body');
     }
+
   });
 
   return {
