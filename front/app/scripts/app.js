@@ -1,3 +1,7 @@
-define([], function() {
-  return 'Hello from Yeoman!';
+define([ 'router'], function(Router) {
+  return {
+    initialize: function(){
+      Router.initialize();
+    }
+  };
 });
