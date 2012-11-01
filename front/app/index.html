@@ -17,15 +17,20 @@
   <script src="scripts/vendor/modernizr.min.js"></script>
 
   <script>
-    window.bootstrappedSessionUser = <%- !!user ? JSON.stringify(user) : JSON.stringify(null) %>;
+    //window.bootstrappedSessionUser = <%- !!user ? JSON.stringify(user) : JSON.stringify(null) %>;
+    window.bootstrappedSessionUser = {name: "Sassy", type: "steward"};
   </script>
 
 </head>
 <body>
 
-<h1>Welcome to Baxter!</h1>
+<div class="navbar navbar-fixed-top" id="top-navigation">
 
-<div id="whereThingsGo"></div>
+</div>
+
+<div class="container-fluid">
+  <div class="row-fluid" id="main-content"></div>
+</div>
 
 <!-- build:js scripts/amd-app.js -->
 <script data-main="scripts/main" src="scripts/vendor/require.js"></script>

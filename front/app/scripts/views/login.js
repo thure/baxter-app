@@ -3,12 +3,13 @@ define([
   'underscore',
   'backbone',
   '../helpers/requests',
+  'spin',
   'text!views/login.html'
-], function($, _, Backbone, R, loginTemplate){
+], function($, _, Backbone, R, Spinner, loginTemplate){
 
   var loginView = Backbone.View.extend({
 
-    el: $('body'),
+    el: $('#main-content'),
 
     render: function(){
       var self = this;
@@ -17,16 +18,36 @@ define([
     },
 
     hide: function(){
-      this.$login.remove();
+      try{this.$login.remove()}catch(e){}
     },
 
     events: {
-      'click .submit': 'submitLogin'
+      'click #loginSubmit': 'submitLogin'
+    },
+
+    lockForm: function(){
+      $('input, button', this.$login).prop('disabled', true);
+      $('a.btn', this.$login).addClass('disabled');
+      $('#loginSubmit .not-during-spin').hide();
+      this.spinner = new Spinner({
+        lines: 9,
+        length: 3,
+        width: 2,
+        radius: 2,
+        color: '#fff',
+        trail: 60
+      }).spin($('#loginSubmit').get(0));
+    },
+
+    unlockForm: function(){
+      this.spinner.stop();
+      $('#loginSubmit .not-during-spin').show();
+      $('a.btn', this.$login).removeClass('disabled');
+      $('input, button', this.$login).prop('disabled', false);
     },
 
     submitLogin: function(e){
-      console.log('Submitting!');
-      e.preventDefault();
+      this.lockForm();
       var self = this
         , loginRequest = R.request({
         endpoint: 'login',
@@ -39,9 +60,13 @@ define([
           .done(function(){
             window.session = arguments[0]['user'];
             console.log('Logged in!');
+            window.Router.navigate('dashboard', {trigger: true});
           })
           .fail(function(){
-            console.log("Couldn't log in!");
+            console.log("Couldn't log in!",arguments);
+          })
+          .always(function(){
+            self.unlockForm();
           });
     }
 
