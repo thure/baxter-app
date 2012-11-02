@@ -2,6 +2,7 @@
 
 var express = require('express')
   , mongoose = require('mongoose')
+  , request = require('request')
   , when = require("promised-io/promise").when
   , login = require('connect-ensure-login')
   , _ = require('underscore')
@@ -81,10 +82,10 @@ db.once('open', function () {
 
   //Routing (insert login.ensureLoggedIn() if protected endpoint)
   app.get('/', passport.authenticate('session'), function(req, res) {
-    when(site.getImps(req, Imps), function(result){
+    when(site.getImps(req, Imps), function(imps){
       res.render('index', {
         user: _.omit(req.user.toJSON(), ['id', '_id']),
-        imps: result
+        imps: imps
       });
     }, function(error){
       res.render('index', {
@@ -114,6 +115,37 @@ db.once('open', function () {
         });
       });
     })(req, res, next);
+  });
+
+  app.put('/trigger/:impId/:endpointName'
+    //, passport.authenticate('session')
+    , function(req, res, next){
+      req.user = {id: 1};
+    if(!!req.user){
+      var impId = parseInt(req.params.impId)
+        , endpointName = decodeURIComponent(req.params.endpointName);
+      when(site.getEndpoint(req, Imps, impId, endpointName), function(endpoint){
+        request({
+          uri: endpoint.URI,
+          method: endpoint.method,
+          json: JSON.parse(endpoint.payload)
+        }, function(error, response, body){
+          if(error) return res.status(response.statusCode).send(body);
+          return res.status(200).json({
+            "message": "Imp successfully triggered"
+          });
+        });
+      }, function(endpointErr){
+        res.status(500).json({
+          "message": "There was a problem getting the endpoint.",
+          "error": endpointErr
+        });
+      });
+    }else{
+      res.status(401).json({
+        "message": "It doesn't appear that you're logged in. Please log in!"
+      });
+    }
   });
 
   app.get('/logout', site.logout);

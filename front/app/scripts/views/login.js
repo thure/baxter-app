@@ -28,7 +28,7 @@ define([
     lockForm: function(){
       $('input, button', this.$login).prop('disabled', true);
       $('a.btn', this.$login).addClass('disabled');
-      $('#loginSubmit .not-during-spin').hide();
+      $('#loginSubmit .not-during-spin').css('visibility', 'none');
       this.spinner = new Spinner({
         lines: 9,
         length: 3,
@@ -41,7 +41,7 @@ define([
 
     unlockForm: function(){
       this.spinner.stop();
-      $('#loginSubmit .not-during-spin').show();
+      $('#loginSubmit .not-during-spin').css('visibility', 'visible');
       $('a.btn', this.$login).removeClass('disabled');
       $('input, button', this.$login).prop('disabled', false);
     },
@@ -59,6 +59,7 @@ define([
       })
           .done(function(){
             window.session = arguments[0]['user'];
+            window.imps = arguments[0]['imps']
             console.log('Logged in!');
             window.Router.navigate('dashboard', {trigger: true});
           })

@@ -6,6 +6,7 @@
   "dependencies": {
     "underscore": "*",
     "promised-io": "*",
+    "request": "*",
     "ejs": "*",
     "express": "3.0.x",
     "connect-ensure-login": "*",
