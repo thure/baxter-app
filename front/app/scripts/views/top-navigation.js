@@ -18,7 +18,11 @@ define([
     },
 
     events: {
+      'click #submitLogout': 'logout'
+    },
 
+    logout: function(){
+      var self = this;
     }
 
   });

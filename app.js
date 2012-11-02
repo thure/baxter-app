@@ -2,7 +2,9 @@
 
 var express = require('express')
   , mongoose = require('mongoose')
+  , when = require("promised-io/promise").when
   , login = require('connect-ensure-login')
+  , _ = require('underscore')
   , config = require('./config.js')
   , site = require('./site.js')
   ;
@@ -28,8 +30,16 @@ db.once('open', function () {
   UserSchema.methods.validPassword = function(password){
     return password === this.password;
   };
-
   var Users = db.model('users', UserSchema);
+
+  var ImpSchema = new mongoose.Schema({
+    id: Number,
+    belongsToUserId: Number,
+    usableByUsersId: [Number],
+    name: String,
+    endpoints: Object
+  });
+  var Imps = db.model('imps', ImpSchema);
 
   //Middleware
   app.configure(function() {
@@ -70,8 +80,42 @@ db.once('open', function () {
   ));
 
   //Routing (insert login.ensureLoggedIn() if protected endpoint)
-  app.get('/', passport.authenticate('session'), site.index);
-  app.post('/login', site.login);
+  app.get('/', passport.authenticate('session'), function(req, res) {
+    when(site.getImps(req, Imps), function(result){
+      res.render('index', {
+        user: _.omit(req.user.toJSON(), ['id', '_id']),
+        imps: result
+      });
+    }, function(error){
+      res.render('index', {
+        user: null,
+        imps: null
+      });
+    });
+  });
+
+  app.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) { return next(err) }
+      if (!user) { return res.status(401).json({"message": "I'm afraid your username or password was incorrect."}) }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        when(site.getImps(req, Imps), function(imps){
+          return res.status(200).json({
+            "message": "You've successfully logged in!" ,
+            "user": _.omit(user.toJSON(), ['id', '_id']),
+            "imps": imps
+          });
+        }, function(impErr){
+          return res.status(500).json({
+            "message": "There was a problem getting the imps.",
+            "error": impErr
+          });
+        });
+      });
+    })(req, res, next);
+  });
+
   app.get('/logout', site.logout);
 
   //Rerouting
