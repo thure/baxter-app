@@ -39,7 +39,8 @@ exports.getImps = function(req, Imps){
         }else{
           var cleanImps = _.map(imps, function(imp){
             var cleanImp = _.omit(imp, ['_id']);
-            cleanImp.endpoints = _.keys(cleanImp.endpoints);
+            if(req.user.type === 'steward') cleanImp.endpointDefinitions = imp.endpoints;
+            cleanImp.endpoints = _.keys(imp.endpoints);
             return cleanImp;
           });
           impP.resolve(cleanImps);
