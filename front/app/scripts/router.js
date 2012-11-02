@@ -1,13 +1,19 @@
 define([ 'backbone'
+  , 'collections/imps'
+  , 'models/session'
   , 'views/top-navigation'
   , 'views/login'
   , 'views/dashboard'
-], function(Backbone, topNavigation, login, dashboard){
+], function(Backbone, Imps, Session, topNavigation, login, dashboard){
 
   var AppRouter = Backbone.Router.extend({
 
     initialize: function(){
       console.log('Router initialized');
+      if(window.bootstrappedSessionUser) Session.set(window.bootstrappedSessionUser);
+      if(window.bootstrappedSessionImps) Imps.reset(window.bootstrappedSessionImps);
+      window.session = Session;
+      window.imps = Imps;
     },
 
     routes: {

@@ -1,11 +1,12 @@
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  '../helpers/requests',
-  'spin',
-  'text!views/login.html'
-], function($, _, Backbone, R, Spinner, loginTemplate){
+define([ 'jquery'
+  , 'underscore'
+  , 'backbone'
+  , 'collections/imps'
+  , 'models/session'
+  , '../helpers/requests'
+  , 'spin'
+  , 'text!views/login.html'
+], function($, _, Backbone, Imps, Session, R, Spinner, loginTemplate){
 
   var loginView = Backbone.View.extend({
 
@@ -58,8 +59,8 @@ define([
         }
       })
           .done(function(){
-            window.session = arguments[0]['user'];
-            window.imps = arguments[0]['imps']
+            Session.set(arguments[0]['user']);
+            Imps.reset(arguments[0]['imps']);
             console.log('Logged in!');
             window.Router.navigate('dashboard', {trigger: true});
           })
