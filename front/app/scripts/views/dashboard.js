@@ -10,7 +10,7 @@ define([ 'jquery'
 
   var dashboardView = Backbone.View.extend({
 
-    el: $('#main-content'),
+    el: $('#title-content'),
 
     render: function(){
       var self = this;
