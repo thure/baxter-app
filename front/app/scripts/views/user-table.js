@@ -4,25 +4,25 @@ define([
   'backbone',
   '../helpers/requests',
   'spin',
-  '../collections/imps'
-  , '../views/imp-row'
-  , 'text!views/imp-table.html'
-], function($, _, Backbone, R, Spinner, Imps, ImpRow, impTableTemplate){
+  '../collections/users'
+  , '../views/user-row'
+  , 'text!views/user-table.html'
+], function($, _, Backbone, R, Spinner, Users, UserRow, userTableTemplate){
 
   var impTable = Backbone.View.extend({
 
     el: $('#main-content'),
 
     initialize: function(){
-      this.impRows = {};
+      this.userRows = {};
     },
 
     render: function(opts){
       var self = this;
-      this.$table = $(_.template(impTableTemplate, {span: opts.span}));
-      Imps.each(function(imp, index){
-        self.impRows[index] = new ImpRow({model: imp, el: $('.accordion', self.$table)});
-        self.impRows[index].render();
+      this.$table = $(_.template(userTableTemplate, {span: opts.span}));
+      Users.each(function(user, index){
+        self.userRows[index] = new UserRow({model: user, el: $('tbody', self.$table)});
+        self.userRows[index].render();
       });
       this.$el.append( self.$table );
     },

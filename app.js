@@ -104,7 +104,7 @@ db.once('open', function () {
         when(site.getImps(req, Imps), function(imps){
           return res.status(200).json({
             "message": "You've successfully logged in!" ,
-            "user": _.omit(user.toJSON(), ['id', '_id']),
+            "user": _.omit(user.toJSON(), ['id', '_id', 'password']),
             "imps": imps
           });
         }, function(impErr){
