@@ -10,10 +10,6 @@ define([ 'backbone'
 
     initialize: function(){
       console.log('Router initialized');
-      if(window.bootstrappedSessionUser) Session.set(window.bootstrappedSessionUser);
-      if(window.bootstrappedSessionImps) Imps.reset(window.bootstrappedSessionImps);
-      window.session = Session;
-      window.imps = Imps;
     },
 
     routes: {
@@ -31,7 +27,7 @@ define([ 'backbone'
     index: function(){
       topNavigation.render();
       console.log('At index.');
-      if(!window.session){
+      if(!Session.get('name')){
         this.login();
       }else{
         this.dashboard();
@@ -46,7 +42,7 @@ define([ 'backbone'
 
     dashboard: function(){
       topNavigation.render();
-      if(window.session){
+      if(!!Session.get('name')){
         login.hide();
         dashboard.render();
       }else{

@@ -5,10 +5,10 @@ define([
 
   return {
 
-    domain: document.location.href,
+    domain: document.location.protocol + '//' + document.location.host + '/',
 
     request: function(opt){
-      var domain = document.location.href;
+      var domain = document.location.protocol + '//' + document.location.host + '/';
 
       return $.ajax({
         url: domain + opt.endpoint,
