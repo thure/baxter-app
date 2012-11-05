@@ -6,6 +6,30 @@ var passport = require('passport')
   , _ = require('underscore')
   ;
 
+exports.getUsers = function(req, res, Users){
+  var usersP = defer();
+  if(!!req.user && req.user.type === 'steward'){
+    Users
+      .find()
+      .lean(true)
+      .exec(function(err, users){
+        if(err){
+          res.status(500);
+          usersP.reject(err);
+        }else{
+          var cleanUsers = _.map(users, function(user){
+            return _.omit(user, ['_id', 'password']);
+          });
+          usersP.resolve(cleanUsers);
+        }
+      })
+  }else{
+    res.status(401);
+    usersP.reject("Not authenticated.");
+  }
+  return usersP;
+};
+
 exports.getEndpoint = function(req, Imps, impId, endpointName){
   var endpointP = defer();
   if(!!req.user){

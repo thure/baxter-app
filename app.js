@@ -118,9 +118,8 @@ db.once('open', function () {
   });
 
   app.put('/trigger/:impId/:endpointName'
-    //, passport.authenticate('session')
+    , passport.authenticate('session')
     , function(req, res, next){
-      req.user = {id: 1};
     if(!!req.user){
       var impId = parseInt(req.params.impId)
         , endpointName = decodeURIComponent(req.params.endpointName);
@@ -146,6 +145,19 @@ db.once('open', function () {
         "message": "It doesn't appear that you're logged in. Please log in!"
       });
     }
+  });
+
+  app.get('/users'
+    , passport.authenticate('session')
+    , function(req, res, next){
+    when(site.getUsers(req, res, Users), function(users){
+      res.status(200).json(users);
+    }, function(err){
+      res.json({
+        "message": "There was a problem getting users.",
+        "error": err
+      });
+    });
   });
 
   app.get('/logout', site.logout);
