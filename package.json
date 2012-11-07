@@ -2,7 +2,7 @@
   "author": "Will Shown",
   "name": "baxter-server",
   "description": "Baxter will help you and authorized guests control and automate your home, using Electric Imp, OAuth, and any peripherals you care to install.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "underscore": "*",
     "promised-io": "*",
