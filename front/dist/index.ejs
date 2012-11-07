@@ -20,7 +20,7 @@
     window.bootstrappedSessionUser = <%- !!user ? JSON.stringify(user) : JSON.stringify(null) %>;
     window.bootstrappedSessionImps = <%- !!imps ? JSON.stringify(imps) : JSON.stringify(null) %>;
     <% if( user.type === 'steward' ) { %>
-      window.bootstrappedUsers = <%- !!users ? JSON.stringify(users) : JSON.stringify(null);
+      window.bootstrappedUsers = <%- !!users ? JSON.stringify(users) : JSON.stringify(null) %>;
     <% } %>
   </script>
 
