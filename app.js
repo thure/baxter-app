@@ -7,7 +7,8 @@ var express = require('express')
   , login = require('connect-ensure-login')
   , _ = require('underscore')
   , config = require('./config.js')
-  , site = require('./site.js')
+  , dbqp = require('./dbqp.js')
+  , care = require('./care.js')
   ;
 
 var app = express()
@@ -80,28 +81,13 @@ db.once('open', function () {
     }
   ));
 
-  //Routing (insert login.ensureLoggedIn() if protected endpoint)
-  app.get('/', passport.authenticate('session'), function(req, res) {
-    when(site.getImps(req, Imps), function(imps){
-      res.render('index', {
-        user: _.omit(req.user.toJSON(), ['id', '_id']),
-        imps: imps
-      });
-    }, function(error){
-      res.render('index', {
-        user: null,
-        imps: null
-      });
-    });
-  });
-
   app.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
       if (err) { return next(err) }
       if (!user) { return res.status(401).json({"message": "I'm afraid your username or password was incorrect."}) }
       req.logIn(user, function(err) {
         if (err) { return next(err); }
-        when(site.getImps(req, Imps), function(imps){
+        when(dbqp.getImps(req, Imps), function(imps){
           return res.status(200).json({
             "message": "You've successfully logged in!" ,
             "user": _.omit(user.toJSON(), ['id', '_id', 'password']),
@@ -117,22 +103,38 @@ db.once('open', function () {
     })(req, res, next);
   });
 
+  app.get('/logout', dbqp.logout);
+
+  //Index
+  app.get('/', passport.authenticate('session'), function(req, res) {
+    when(dbqp.getImps(req, Imps), function(imps){
+      res.render('index', {
+        user: _.omit(req.user.toJSON(), ['id', '_id']),
+        imps: imps
+      });
+    }, function(error){
+      res.render('index', {
+        user: null,
+        imps: null
+      });
+    });
+  });
+
+  //Imp feeding
   app.put('/trigger/:impId/:endpointName'
     , passport.authenticate('session')
     , function(req, res, next){
     if(!!req.user){
       var impId = parseInt(req.params.impId)
         , endpointName = decodeURIComponent(req.params.endpointName);
-      when(site.getEndpoint(req, Imps, impId, endpointName), function(endpoint){
+      when(dbqp.getEndpoint(req, Imps, impId, endpointName), function(endpoint){
         request({
           uri: endpoint.URI,
           method: endpoint.method,
           json: JSON.parse(endpoint.payload)
         }, function(error, response, body){
           if(error) return res.status(response.statusCode).send(body);
-          return res.status(200).json({
-            "message": "Imp successfully triggered"
-          });
+          care.waitForResponse(req, res, next);
         });
       }, function(endpointErr){
         res.status(500).json({
@@ -147,10 +149,20 @@ db.once('open', function () {
     }
   });
 
+  //Imp care
+  app.put('/imp/response'
+    , care.handleResponse
+  );
+
+  app.put('imp/phone'
+    , care.handleCall
+  );
+
+  //Administration
   app.get('/users'
     , passport.authenticate('session')
     , function(req, res, next){
-    when(site.getUsers(req, res, Users), function(users){
+    when(dbqp.getUsers(req, res, Users), function(users){
       res.status(200).json(users);
     }, function(err){
       res.json({
@@ -159,8 +171,6 @@ db.once('open', function () {
       });
     });
   });
-
-  app.get('/logout', site.logout);
 
   //Rerouting
   app.get(/\/styles(.*)/, function(req, res){

@@ -12,7 +12,8 @@
     "connect-ensure-login": "*",
     "passport": "*",
     "passport-local": "*",
-    "mongoose": "3.3.x"
+    "mongoose": "3.3.x",
+    "nodemailer": "*"
   },
   "engines": {
     "node": "0.8.x",
