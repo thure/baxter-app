@@ -15,6 +15,7 @@ function failedToRespond(req, res, next){
 }
 
 function succeededInResponding(req, res, next){
+  waiting.req = void(0); waiting.res = void(0); waiting.next = void(0);
   return res.status(200).json({
     "message": "The imp has done what you asked of it."
   });
@@ -22,7 +23,16 @@ function succeededInResponding(req, res, next){
 
 exports.handleResponse = function(req, res, next){
   clearTimeout(waiting.timeout);
-  return succeededInResponding(waiting.req || req, waiting.res || res, waiting.next || next);
+  if(!!waiting.res){
+    res.status(200).json({
+      "message": "Thanks for responding!"
+    });
+    return succeededInResponding(waiting.req, waiting.res, waiting.next);
+  }else{
+    return res.status(424).json({
+      "message": "I wasn't waiting for you to respond to me."
+    });
+  }
 };
 
 exports.waitForResponse = function(req, res, next){
@@ -45,7 +55,7 @@ function failedToCall(req){
 exports.handleCall = function(req, res, next){
   clearTimeout(callWait[req.body.id]);
   callWait[req.body.id] = setTimeout(failedToCall, 6e5, req);
-  res.status(200).json({
+  return res.status(200).json({
     "message": "Thanks for calling!"
   });
 };
