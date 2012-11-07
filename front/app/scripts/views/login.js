@@ -15,7 +15,7 @@ define([ 'jquery'
     render: function(){
       var self = this;
       this.$login = $(loginTemplate);
-      this.$el.append(self.$login);
+      this.$el.html(self.$login);
     },
 
     hide: function(){

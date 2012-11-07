@@ -15,6 +15,7 @@ define([ 'backbone'
     routes: {
       // global
       '': 'index',
+      'login': 'login',
       'dashboard': 'dashboard',
       'control': 'control',
       'guests': 'guests',
@@ -26,17 +27,15 @@ define([ 'backbone'
 
     index: function(){
       topNavigation.render();
-      console.log('At index.');
       if(!Session.get('name')){
-        this.login();
+        this.navigate('login',{trigger: true});
       }else{
-        this.dashboard();
+        this.navigate('dashboard',{trigger: true});
       }
     },
 
     login: function(){
       topNavigation.render();
-      console.log('Gonna log you in now.');
       login.render();
     },
 
@@ -46,7 +45,7 @@ define([ 'backbone'
         login.hide();
         dashboard.render();
       }else{
-        this.login();
+        this.navigate('login',{trigger: true});
       }
     },
 
