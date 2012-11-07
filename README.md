@@ -11,7 +11,9 @@ The Baxter app is designed to interface with one or more [Electric Imp](http://e
 
 ##Installation
 
-1. Add a mongodb user for Baxter and change config.js accordingly.
+1. Add a mongodb user for Baxter and change `config.js` accordingly.
+
+1. Add email credentials to `config.js`. You should consider giving Baxter its own email address so you can take full advantage of [IFTTT](http://ifttt.com)'s features.
 
 1. Run `yeoman init` while in the `front` directory. (Install [yeoman](http://yeoman.io) if you don't have it.)
 
