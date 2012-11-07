@@ -7,11 +7,11 @@ You can probably tell Baxter isn't ready yet. Watch this repo or follow [@W0lftr
 
 ##About
 
-The Baxter app is designed to interface with one or more [Electric Imp](http://electricimp.com) clients running [Baxter imp](https://github.com/thure/baxter-imp).
+The Baxter app is designed to interface with one or more [Electric Imp](http://electricimp.com) clients running [Baxter imp](https://github.com/thure/baxter-imp), your modifications thereof, or your own software.
 
 ##Installation
 
-1. Add a mongodb user for Baxter and change `config.js` accordingly.
+1. Add a mongodb user for Baxter and change `config.js` accordingly. Currently there is no CRUD for imps or users, so you'll have to add those manually.
 
 1. Add email credentials to `config.js`. You should consider giving Baxter its own email address so you can take full advantage of [IFTTT](http://ifttt.com)'s features.
 
