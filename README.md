@@ -28,4 +28,8 @@ The Baxter app is designed to interface with one or more [Electric Imp](http://e
 Baxter, both app and imp, are themselves released under the [MIT license](http://bureaujs.org/license).
 All of Baxter's dependencies are open source, but have their own licenses.
 
-As a reminder, it's not Baxter's fault if your implementation of Baxter causes problems with your landlord or building manager. Read your lease carefully before installing peripherals!
+##Suggestions
+
+As a reminder, Baxter isn't liable if your implementation causes problems with your landlord or building. Read your lease carefully before hacking your home!
+
+Take advantage of Baxter's phoning-home features (in `care.js` and described in Baxter-imp) – it'll help keep you abreast of your imps' statuses and help keep your imps awake at all times (in cases where they need to be).
