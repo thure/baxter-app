@@ -22,7 +22,7 @@ function succeededInResponding(req, res, next){
 
 exports.handleResponse = function(req, res, next){
   clearTimeout(waiting.timeout);
-  return succeededInResponding(waiting.req, waiting.res, waiting.next);
+  return succeededInResponding(waiting.req || req, waiting.res || res, waiting.next || next);
 };
 
 exports.waitForResponse = function(req, res, next){
@@ -45,4 +45,7 @@ function failedToCall(req){
 exports.handleCall = function(req, res, next){
   clearTimeout(callWait[req.body.id]);
   callWait[req.body.id] = setTimeout(failedToCall, 6e5, req);
+  res.status(200).json({
+    "message": "Thanks for calling!"
+  });
 };
