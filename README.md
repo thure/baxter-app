@@ -38,7 +38,7 @@ Upcoming features include:
 Baxter, both app and imp, are themselves released under the [MIT license](http://bureaujs.org/license).
 All of Baxter's dependencies are open source, but have their own licenses.
 
-##Suggestions
+##The not-so-fine print you should read
 
 As a reminder, Baxter isn't liable if your implementation causes problems with your landlord or building. Read your lease carefully before hacking your home!
 
