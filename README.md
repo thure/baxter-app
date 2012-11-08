@@ -43,3 +43,5 @@ All of Baxter's dependencies are open source, but have their own licenses.
 As a reminder, Baxter isn't liable if your implementation causes problems with your landlord or building. Read your lease carefully before hacking your home!
 
 Take advantage of Baxter's phoning-home features (in `care.js` and described in Baxter-imp) – it'll help keep you abreast of your imps' statuses and help keep your imps awake at all times (in cases where they need to be).
+
+Beware! Passwords are currently only passed in plaintext. Use passwords you don't care about until encryption is implemented. Using HTTPS is always recommended.
