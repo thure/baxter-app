@@ -31,7 +31,7 @@ Upcoming features include:
 
 1. Remove `dist` from `.gitignore` in the `front` directory if you plan on committing with git.
 
-1. **Deploy!** Make sure the `dist` directory makes it to your deployment! You can ignore the `temp` directory.
+1. **Deploy!** Make sure the `front/dist` directory makes it to your deployment! You can ignore the `front/temp` directory.
 
 ##License
 
