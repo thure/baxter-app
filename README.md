@@ -7,7 +7,17 @@ You can probably tell Baxter isn't ready yet. Watch this repo or follow [@W0lftr
 
 ##About
 
-The Baxter app is designed to interface with one or more [Electric Imp](http://electricimp.com) clients running [Baxter imp](https://github.com/thure/baxter-imp), your modifications thereof, or your own software.
+The Baxter app is designed to interface with one or more [Electric Imp](http://electricimp.com) clients running [Baxter imp](https://github.com/thure/baxter-imp), your modifications thereof, or your own software & hardware.
+
+Baxter app is designed to let you and your authorized users control low-level devices that have HTTP endpoints, such as the Electric Imp.
+Baxter runs on node.js and can be easily deployed to [node hosting services](https://github.com/joyent/node/wiki/Node-Hosting).
+
+Implementation isn't complete, but soon you'll be able to set-up Baxter, add devices and users, and start programming your way to home automation!
+Upcoming features include:
+
++ Scheduling times when users can use particular functions of a device
++ An interactive planner that sets up all the right endpoints for complex devices.
++ OAuth v2 provision and logging in from other OAuth providers like Facebook and GitHub.
 
 ##Installation
 
