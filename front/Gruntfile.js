@@ -184,6 +184,7 @@ module.exports = function( grunt ) {
   });
 
   // Alias the `test` task to run the `mocha` task instead
+  grunt.registerTask('build','intro clean compass mkdirs usemin-handler rjs concat css min img usemin manifest copy time');
   grunt.registerTask('test', 'server:phantom mocha');
 
 };
