@@ -12,17 +12,19 @@ exports.login = function(req, res, next, Models) {
     if (!user) { return res.status(401).json({"message": "I'm afraid your username or password was incorrect."}) }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      when(dbqp.getImpsAndUsers(req, Models), function(impsAndUsers){ //TODO: update this.
+      when(
+        req.user.type === 'steward' ? dbqp.getImpsAndUsers(req, Models) : dbqp.getImps(req, Models.Imps),
+        function(impsAndMaybeUsers){
         return res.status(200).json({
           "message": "You've successfully logged in!" ,
           "user": _.omit(user.toJSON(), ['id', '_id', 'password']),
-          "imps": impsAndUsers[0],
-          "users": impsAndUsers[1]
+          "imps": impsAndMaybeUsers[0],
+          "users": !!impsAndMaybeUsers[1] ? impsAndMaybeUsers[1] : void(0)
         });
-      }, function(impErr){
+      }, function(err){
         return res.status(500).json({
-          "message": "There was a problem getting the imps.",
-          "error": impErr
+          "message": "There was a problem getting the things you'll need.",
+          "error": err
         });
       });
     });
