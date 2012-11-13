@@ -3,10 +3,11 @@
  */
 var passport = require('passport')
   , defer = require("promised-io/promise").Deferred
+  , all = require("promised-io/promise").all
   , _ = require('underscore')
   ;
 
-exports.getUsers = function(req, res, Users){
+var getUsers = function(req, Users){
   var usersP = defer();
   if(!!req.user && req.user.type === 'steward'){
     Users
@@ -14,23 +15,23 @@ exports.getUsers = function(req, res, Users){
       .lean(true)
       .exec(function(err, users){
         if(err){
-          res.status(500);
           usersP.reject(err);
         }else{
           var cleanUsers = _.map(users, function(user){
-            return _.omit(user, ['_id', 'password']);
+            return _.omit(user, ['password']);
           });
           usersP.resolve(cleanUsers);
         }
       })
   }else{
-    res.status(401);
     usersP.reject("Not authenticated.");
   }
-  return usersP;
+  return usersP.promise;
 };
 
-exports.getEndpoint = function(req, Imps, impId, endpointName){
+exports.getUsers = getUsers;
+
+var getEndpoint = function(req, Imps, impId, endpointName){
   var endpointP = defer();
   if(!!req.user){
     Imps
@@ -47,10 +48,12 @@ exports.getEndpoint = function(req, Imps, impId, endpointName){
   }else{
     endpointP.reject("Not authenticated.");
   }
-  return endpointP;
+  return endpointP.promise;
 };
 
-exports.getImps = function(req, Imps){
+exports.getEndpoint = getEndpoint;
+
+var getImps = function(req, Imps){
   var impP = defer();
   if(!!req.user){
     Imps
@@ -76,7 +79,25 @@ exports.getImps = function(req, Imps){
   return impP.promise;
 };
 
-exports.logout = function(req, res) {
-  req.logout();
-  res.status(200).json({"message": "You've successfully logged out."});
+exports.getImps = getImps;
+
+var getImpsAndUsers = function(req, Models){
+
+  var bothP = defer()
+    , impP = getImps(req, Models.Imps)
+    , usersP = getUsers(req, Models.Users);
+
+  all(impP, usersP).then(
+    function(impsAndUsers){
+      bothP.resolve(impsAndUsers);
+    },
+    function(error){
+      bothP.reject(error);
+    }
+  );
+
+  return bothP.promise;
+
 };
+
+exports.getImpsAndUsers = getImpsAndUsers;

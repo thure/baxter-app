@@ -2,12 +2,8 @@
 
 var express = require('express')
   , mongoose = require('mongoose')
-  , request = require('request')
-  , when = require("promised-io/promise").when
-  , login = require('connect-ensure-login')
-  , _ = require('underscore')
+  , site = require('./site.js')
   , config = require('./config.js')
-  , dbqp = require('./dbqp.js')
   , care = require('./care.js')
   ;
 
@@ -21,6 +17,8 @@ var passport = require('passport')
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', function () {
 
+  var Models = {};
+
   //Database
   var UserSchema = new mongoose.Schema({
     id: Number,
@@ -32,7 +30,7 @@ db.once('open', function () {
   UserSchema.methods.validPassword = function(password){
     return password === this.password;
   };
-  var Users = db.model('users', UserSchema);
+  Models.Users = db.model('users', UserSchema);
 
   var ImpSchema = new mongoose.Schema({
     id: Number,
@@ -41,7 +39,7 @@ db.once('open', function () {
     name: String,
     endpoints: Object
   });
-  var Imps = db.model('imps', ImpSchema);
+  Models.Imps = db.model('imps', ImpSchema);
 
   //Middleware
   app.configure(function() {
@@ -62,13 +60,13 @@ db.once('open', function () {
     done(null, user.id);
   });
   passport.deserializeUser(function(id, done) {
-    Users.findOne({id: id}, function (err, user) {
+    Models.Users.findOne({id: id}, function (err, user) {
       done(err, user);
     });
   });
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      Users.findOne({ username: username }, function (err, user) {
+      Models.Users.findOne({ username: username }, function (err, user) {
         if (err) { return done(err); }
         if (!user) {
           return done(null, false, { message: 'Unknown user' });
@@ -81,72 +79,22 @@ db.once('open', function () {
     }
   ));
 
-  app.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err) { return next(err) }
-      if (!user) { return res.status(401).json({"message": "I'm afraid your username or password was incorrect."}) }
-      req.logIn(user, function(err) {
-        if (err) { return next(err); }
-        when(dbqp.getImps(req, Imps), function(imps){
-          return res.status(200).json({
-            "message": "You've successfully logged in!" ,
-            "user": _.omit(user.toJSON(), ['id', '_id', 'password']),
-            "imps": imps
-          });
-        }, function(impErr){
-          return res.status(500).json({
-            "message": "There was a problem getting the imps.",
-            "error": impErr
-          });
-        });
-      });
-    })(req, res, next);
+  app.post('/login', function(req, res, next){
+    site.login(req, res, next, Models)
   });
 
-  app.get('/logout', dbqp.logout);
+  app.get('/logout', site.logout);
 
   //Index
-  app.get('/', passport.authenticate('session'), function(req, res) {
-    when(dbqp.getImps(req, Imps), function(imps){
-      res.render('index', {
-        user: _.omit(req.user.toJSON(), ['id', '_id']),
-        imps: imps
-      });
-    }, function(error){
-      res.render('index', {
-        user: null,
-        imps: null
-      });
-    });
+  app.get('/', passport.authenticate('session'), function(req, res, next){
+    site.index(req, res, next, Models);
   });
 
   //Imp feeding
   app.put('/trigger/:impId/:endpointName'
     , passport.authenticate('session')
     , function(req, res, next){
-    if(!!req.user){
-      var impId = parseInt(req.params.impId)
-        , endpointName = decodeURIComponent(req.params.endpointName);
-      when(dbqp.getEndpoint(req, Imps, impId, endpointName), function(endpoint){
-        request({
-          uri: endpoint.URI,
-          method: endpoint.method,
-          json: JSON.parse(endpoint.payload)
-        }, function(error, response, body){
-          if(error) return res.status(response.statusCode).send(body);
-          care.waitForResponse(req, res, next);
-        });
-      }, function(endpointErr){
-        res.status(500).json({
-          "message": "There was a problem getting the endpoint.",
-          "error": endpointErr
-        });
-      });
-    }else{
-      res.status(401).json({
-        "message": "It doesn't appear that you're logged in. Please log in!"
-      });
-    }
+    site.trigger(req, res, next, Models.Imps);
   });
 
   //Imp care
@@ -162,14 +110,7 @@ db.once('open', function () {
   app.get('/users'
     , passport.authenticate('session')
     , function(req, res, next){
-    when(dbqp.getUsers(req, res, Users), function(users){
-      res.status(200).json(users);
-    }, function(err){
-      res.json({
-        "message": "There was a problem getting users.",
-        "error": err
-      });
-    });
+    site.getUsers(req, res, next, Models.Users);
   });
 
   //Rerouting
