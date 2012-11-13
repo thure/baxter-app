@@ -13,20 +13,20 @@ exports.login = function(req, res, next, Models) {
     req.logIn(user, function(err) {
       if (err) { return next(err); }
       when(
-        req.user.type === 'steward' ? dbqp.getImpsAndUsers(req, Models) : dbqp.getImps(req, Models.Imps),
+        !!req.user && req.user.type === 'steward' ? dbqp.getImpsAndUsers(req, Models) : dbqp.getImps(req, Models.Imps),
         function(impsAndMaybeUsers){
-        return res.status(200).json({
-          "message": "You've successfully logged in!" ,
-          "user": _.omit(user.toJSON(), ['id', '_id', 'password']),
-          "imps": impsAndMaybeUsers[0],
-          "users": !!impsAndMaybeUsers[1] ? impsAndMaybeUsers[1] : void(0)
+          return res.status(200).json({
+            "message": "You've successfully logged in!" ,
+            "user": _.omit(user.toJSON(), ['id', '_id', 'password']),
+            "imps": impsAndMaybeUsers[0],
+            "users": !!impsAndMaybeUsers[1] ? impsAndMaybeUsers[1] : void(0)
+          });
+        }, function(err){
+          return res.status(500).json({
+            "message": "There was a problem getting the things you'll need.",
+            "error": err
+          });
         });
-      }, function(err){
-        return res.status(500).json({
-          "message": "There was a problem getting the things you'll need.",
-          "error": err
-        });
-      });
     });
   })(req, res, next);
 };
@@ -37,19 +37,21 @@ exports.logout = function(req, res) {
 };
 
 exports.index = function(req, res, next, Models){
-  when(dbqp.getImpsAndUsers(req, Models), function(impsAndUsers){
-    res.render('index', {
-      user: _.omit(req.user.toJSON(), ['id', '_id']),
-      imps: impsAndUsers[0],
-      users: impsAndUsers[1]
+  when(
+    !!req.user && req.user.type === 'steward' ? dbqp.getImpsAndUsers(req, Models) : dbqp.getImps(req, Models.Imps),
+    function(impsAndMaybeUsers){
+      res.render('index', {
+        user: _.omit(req.user.toJSON(), ['id', '_id']),
+        imps: impsAndMaybeUsers[0],
+        users: !!impsAndMaybeUsers[1] ? impsAndMaybeUsers[1] : void(0)
+      });
+    }, function(error){
+      res.render('index', {
+        user: null,
+        imps: null,
+        users: null
+      });
     });
-  }, function(error){
-    res.render('index', {
-      user: null,
-      imps: null,
-      users: null
-    });
-  });
 };
 
 exports.trigger = function(req, res, next, Imps){

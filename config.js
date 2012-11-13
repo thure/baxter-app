@@ -10,16 +10,16 @@ exports.db = {
 };
 
 exports.smtp = {
-  host: "smpt.host.com", // hostname
+  host: "mail.willshown.com", // hostname
   secureConnection: true, // use SSL
   port: 465, // port for secure SMTP
   auth: {
-    user: "baxter@host.com",
-    pass: "password"
+    user: "baxter+willshown.com",
+    pass: "7Umfd4zMAm2qB3tGddqGbH3U"
   }
 };
 
 exports.email = {
-  from: "Baxter <baxter@host.com>",
-  to: "you@yourhost.com"
+  from: "Baxter <baxter@willshown.com>",
+  to: "w@willshown.com"
 };

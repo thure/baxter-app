@@ -16,14 +16,6 @@ define([
       var self = this;
       this.$topNavigation = $(_.template(topNavigationTemplate, {user: Session.attributes}));
       this.$el.html(self.$topNavigation);
-    },
-
-    events: {
-      'click #submitLogout': 'logout'
-    },
-
-    logout: function(){
-      var self = this;
     }
 
   });
