@@ -5,7 +5,7 @@
   "version": "0.0.2",
   "dependencies": {
     "underscore": "*",
-    "promised-io": "*",
+    "promised-io": "git://github.com/rap1ds/promised-io.git",
     "request": "*",
     "ejs": "*",
     "express": "3.0.x",

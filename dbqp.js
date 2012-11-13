@@ -84,17 +84,18 @@ exports.getImps = getImps;
 var getImpsAndUsers = function(req, Models){
 
   var bothP = defer()
-    , impP = getImps(req, Models.Imps)
-    , usersP = getUsers(req, Models.Users);
+    , impsP = getImps(req, Models.Imps)
+    , usersP = getUsers(req, Models.Users)
+    ;
 
-  all(impP, usersP).then(
-    function(impsAndUsers){
-      bothP.resolve(impsAndUsers);
-    },
-    function(error){
-      bothP.reject(error);
-    }
-  );
+    all(impsP, usersP).then(
+      function(impsAndUsers){
+        bothP.resolve(impsAndUsers);
+      },
+      function(error){
+        bothP.reject(error);
+      }
+    );
 
   return bothP.promise;
 
