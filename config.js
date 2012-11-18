@@ -1,6 +1,6 @@
 var dbu = 'baxter'
-  , dbp = 'Ghsqu2r0UoTN3JSkoCeL'
-  , dburi = 'mongodb://' + dbu + ':' + dbp + '@alex.mongohq.com:10063/app8710643'
+  , dbp = 'password'
+  , dburi = 'mongodb://' + dbu + ':' + dbp + '@sub.domain.tld:port/path'
   ;
 
 exports.db = {
@@ -10,16 +10,16 @@ exports.db = {
 };
 
 exports.smtp = {
-  host: "mail.willshown.com", // hostname
+  host: "smpt.host.com", // hostname
   secureConnection: true, // use SSL
   port: 465, // port for secure SMTP
   auth: {
-    user: "baxter+willshown.com",
-    pass: "7Umfd4zMAm2qB3tGddqGbH3U"
+    user: "baxter@host.com",
+    pass: "password"
   }
 };
 
 exports.email = {
-  from: "Baxter <baxter@willshown.com>",
-  to: "w@willshown.com"
+  from: "Baxter <baxter@host.com>",
+  to: "you@yourhost.com"
 };
