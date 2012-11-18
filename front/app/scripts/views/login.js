@@ -5,8 +5,9 @@ define([ 'jquery'
   , 'models/session'
   , '../helpers/requests'
   , 'spin'
+  , 'crypto'
   , 'text!views/login.html'
-], function($, _, Backbone, Imps, Session, R, Spinner, loginTemplate){
+], function($, _, Backbone, Imps, Session, R, Spinner, crypto, loginTemplate){
 
   var loginView = Backbone.View.extend({
 
@@ -55,7 +56,7 @@ define([ 'jquery'
         method: 'POST',
         payload: {
           username: $('#inputUsername', self.$login).val(),
-          password: $('#inputPassword', self.$login).val()
+          password: crypto.HmacSHA512($('#inputUsername', self.$login).val(), $('#inputPassword', self.$login).val()).toString()
         }
       })
           .done(function(){

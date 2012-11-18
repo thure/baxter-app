@@ -10,6 +10,9 @@ require.config({
       deps: ['underscore', 'jquery'],
       exports: 'Backbone'
     },
+    'crypto': {
+      exports: 'CryptoJS'
+    },
     'bootstrap-affix': {
       deps: ['jquery']
     },
@@ -53,6 +56,7 @@ require.config({
     'underscore': 'vendor/underscore/underscore',
     'backbone': 'vendor/backbone/backbone',
     'spin': 'vendor/spin/spin.min',
+    'crypto': 'vendor/CryptoJS/hmac-sha512',
     'bootstrap-affix': 'vendor/bootstrap/bootstrap-affix',
     'bootstrap-alert': 'vendor/bootstrap/bootstrap-alert',
     'bootstrap-button': 'vendor/bootstrap/bootstrap-button',
@@ -72,6 +76,7 @@ require([ 'jquery'
   , 'underscore'
   , 'backbone'
   , 'spin'
+  , 'crypto'
   , 'bootstrap-affix'
   , 'bootstrap-alert'
   , 'bootstrap-button'
@@ -85,7 +90,7 @@ require([ 'jquery'
   , 'bootstrap-transition'
   , 'bootstrap-typeahead'
   , 'app'
-], function($, _, Backbone, Spin, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, App) {
+], function($, _, Backbone, Spin, Crypto, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, App) {
 
   App.initialize();
 

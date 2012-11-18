@@ -23,12 +23,12 @@ db.once('open', function () {
   var UserSchema = new mongoose.Schema({
     id: Number,
     username: String,
-    password: String,
+    identifier: String,
     name: String,
     type: String
   });
-  UserSchema.methods.validPassword = function(password){
-    return password === this.password;
+  UserSchema.methods.validPassword = function(identifier){
+    return identifier === this.identifier;
   };
   Models.Users = db.model('users', UserSchema);
 
@@ -65,13 +65,13 @@ db.once('open', function () {
     });
   });
   passport.use(new LocalStrategy(
-    function(username, password, done) {
+    function(username, identifier, done) {
       Models.Users.findOne({ username: username }, function (err, user) {
         if (err) { return done(err); }
         if (!user) {
           return done(null, false, { message: 'Unknown user' });
         }
-        if (!user.validPassword(password)) {
+        if (!user.validPassword(identifier)) {
           return done(null, false, { message: 'Invalid password' });
         }
         return done(null, user);
