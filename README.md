@@ -1,9 +1,9 @@
 Baxter (web app)
 =============
 
-##In development
+##Development indefinitely postponed
 
-You can probably tell Baxter isn't ready yet. Watch this repo or follow [@W0lftron](https://twitter.com/W0lftron) for updates!
+Sorry folks, but thems the breaks. Tweet me at [@W0lftron](https://twitter.com/W0lftron) if you're using or interested in Baxter! For now, though, my attention is focused on other projects.
 
 ##About
 
